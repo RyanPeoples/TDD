@@ -1,3 +1,9 @@
 module.exports = function reverseString(string) {
-  // Your code here
+  let strArr = string.split("");
+  let result = [];
+  for (let i = strArr.length - 1 ; i>=0;i--){
+    let letter = strArr[i];
+    result.push(letter)
+  }
+  // return result.join('')
 };
