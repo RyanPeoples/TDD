@@ -1,5 +1,8 @@
 const chai = require("chai");
 const expect = chai.expect;
+const spies = require("chai-spies");
+const { greetAll } = require("../problems/person.js");
+chai.use(spies);
 const Person = require("../problems/person.js");
 
 describe("person", () => {
@@ -42,11 +45,35 @@ describe("person", () => {
     });
     describe('try update tells if update works', () => {
       it('returns true if update works', () => {
-
+        const obj = { name: 'Mary', age: 12 }
+        const res = newPerson.tryUpdate(obj);
+        expect(newPerson.name).to.equal(obj.name);
+        expect(newPerson.age).to.equal(obj.age);
       })
       it('returns false if update doesn"t work', () => {
-        
+        const obj = {name: 122, age:'twelve'}
+        const res = newPerson.tryUpdate(obj);
+        expect(newPerson.name).to.not.equal(obj.name);
+        expect(newPerson.age).to.not.equal(obj.age);
       })
     })
   });
+  describe("greetAll(obj) should greet all",()=>{
+    it("should call sayHello on all instances", () => {
+      const person2 = new Person("jeff", 30);
+      let introSpy = chai.spy.on(newPerson, "sayHello");
+      let introSpy2 = chai.spy.on(person2, "sayHello");
+      Person.greetAll([newPerson, person2]);
+      expect(introSpy).to.have.been.called.once;
+      expect(introSpy2).to.have.been.called.once;
+    })
+    it("should return array joined into string",()=>{
+      const person = new Person("jeff", 30);
+      const person1 = new Person("Joon", 30);
+      const person2 = new Person("Brad", 30);
+      const person3 = new Person("Kelly", 30);
+      let result = Person.greetAll([person, person1, person2, person3]);
+      expect(result).to.equal('What"s up, jeff? What"s up, Joon? What"s up, Brad? What"s up, Kelly?')
+    })
+  })
 });
